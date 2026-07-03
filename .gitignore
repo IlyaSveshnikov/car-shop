@@ -1,0 +1,29 @@
+# Зависимости
+node_modules/
+
+# Сборки
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Переменные окружения (хранятся секреты) — коммитим только .env.example
+.env
+.env.local
+.env.*.local
+
+# Логи
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Редакторы / ОС
+.DS_Store
+.idea/
+*.swp
+
+# Отчёт по учебной практике и материалы — не часть приложения
+*.docx
+*.pdf
+generate_report.py
