@@ -226,23 +226,32 @@ const styles = {
   crumbSep: { color: theme.colors.border },
   top: {
     display: "grid",
-    gridTemplateColumns: "1.15fr 1fr",
+    // minmax(0, …) не даёт колонке растягиваться до натуральной ширины картинки.
+    gridTemplateColumns: "minmax(0, 1.15fr) minmax(0, 1fr)",
     gap: "40px",
     "@media (max-width: 900px)": { gridTemplateColumns: "1fr" },
   },
-  gallery: { display: "flex", flexDirection: "column", gap: "16px" },
+  gallery: { minWidth: 0, display: "flex", flexDirection: "column", gap: "16px" },
   mainImageBox: {
     position: "relative",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    aspectRatio: "16 / 11",
-    padding: "32px",
+    width: "100%",
+    // Фиксированная адаптивная высота вместо aspect-ratio — картинка не может раздуться.
+    height: "clamp(300px, 34vw, 440px)",
+    padding: "28px",
     backgroundColor: theme.colors.surface,
     border: `1px solid ${theme.colors.border}`,
     borderRadius: theme.radius.xl,
   },
-  mainImage: { width: "100%", height: "100%", objectFit: "contain" },
+  mainImage: {
+    maxWidth: "100%",
+    maxHeight: "100%",
+    width: "auto",
+    height: "auto",
+    objectFit: "contain",
+  },
   soldBadge: {
     position: "absolute",
     top: "20px",
@@ -266,7 +275,7 @@ const styles = {
   },
   thumbActive: { borderColor: theme.colors.primary },
   thumbImg: { width: "100%", height: "100%", objectFit: "contain" },
-  summary: { display: "flex", flexDirection: "column" },
+  summary: { minWidth: 0, display: "flex", flexDirection: "column" },
   badge: {
     alignSelf: "flex-start",
     padding: "5px 12px",
@@ -324,7 +333,7 @@ const styles = {
   note: { margin: 0, fontSize: "13px", color: theme.colors.textMuted },
   details: {
     display: "grid",
-    gridTemplateColumns: "1.4fr 1fr",
+    gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)",
     gap: "48px",
     padding: "56px 0",
     "@media (max-width: 900px)": { gridTemplateColumns: "1fr", gap: "32px" },

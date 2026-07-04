@@ -1,15 +1,16 @@
 import { FC, ReactNode } from "react";
 import { observer } from "mobx-react-lite";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useCartStore, useFavoritesStore } from "../../stores/context";
 import { theme } from "../../styles/theme";
+import Logo from "../ui/Logo";
 import { HeartIcon } from "../icons/HeartIcon";
 import { CartIcon } from "../icons/CartIcon";
 
 const NAV_LINKS = [
-  { to: "/catalog", label: "Каталог" },
-  { to: "/how-to-buy", label: "Как купить" },
-  { to: "/about", label: "О нас" },
+  { to: "/", label: "Главная", end: true },
+  { to: "/catalog", label: "Каталог", end: false },
+  { to: "/qa", label: "Q&A", end: false },
 ];
 
 /** Верхняя панель сайта: логотип, навигация и иконки избранного/корзины. */
@@ -20,16 +21,16 @@ const Navbar: FC = observer(() => {
   return (
     <header css={styles.header}>
       <div css={styles.inner}>
-        <Link to="/" css={styles.logo} aria-label="AutoHub — на главную">
-          <span css={styles.logoMark}>◈</span>
-          Auto<span css={styles.logoAccent}>Hub</span>
-        </Link>
+        <span css={styles.logo}>
+          <Logo size={34} />
+        </span>
 
         <nav css={styles.nav}>
           {NAV_LINKS.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
+              end={link.end}
               css={styles.navLink}
               style={({ isActive }) =>
                 isActive ? { color: theme.colors.primary } : undefined
@@ -100,25 +101,13 @@ const styles = {
   logo: {
     display: "inline-flex",
     alignItems: "center",
-    gap: "8px",
-    fontSize: "22px",
-    fontWeight: 800,
-    color: theme.colors.text,
-    textDecoration: "none",
-    letterSpacing: "-0.02em",
-  },
-  logoMark: {
-    color: theme.colors.primary,
-    fontSize: "20px",
-  },
-  logoAccent: {
-    color: theme.colors.primary,
   },
   nav: {
     display: "flex",
     alignItems: "center",
     gap: "28px",
-    "@media (max-width: 760px)": { display: "none" },
+    "@media (max-width: 560px)": { gap: "16px" },
+    "@media (max-width: 380px)": { display: "none" },
   },
   navLink: {
     fontSize: "15px",

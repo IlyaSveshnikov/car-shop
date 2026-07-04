@@ -14,7 +14,10 @@
 ![Tech](https://img.shields.io/badge/MobX-6-FF9955?logo=mobx&logoColor=white)
 ![Tech](https://img.shields.io/badge/Vite-3-646CFF?logo=vite&logoColor=white)
 
-<!-- 🔗 Живое демо: добавьте ссылку после деплоя (Vercel для клиента + Render/Railway для сервера). -->
+<!-- 🔗 Живое демо: добавьте ссылку сюда после деплоя. -->
+
+**Деплой:** проект разворачивается одним сервисом (NestJS отдаёт API и собранный клиент).
+Пошаговый гайд — [DEPLOY.md](DEPLOY.md) (Render one-click / Docker).
 
 ## 📸 Скриншоты
 

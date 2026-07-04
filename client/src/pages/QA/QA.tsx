@@ -48,32 +48,43 @@ const FAQ = [
     q: "Возможна ли доставка в другой город?",
     a: "Да, организуем доставку автомобиля по всей России транспортной компанией или собственным автовозом.",
   },
+  {
+    q: "Как записаться на тест-драйв?",
+    a: "Добавьте автомобиль в корзину и оформите заявку — менеджер согласует удобные дату и время.",
+  },
+  {
+    q: "Все ли автомобили есть в наличии?",
+    a: "Наличие указано в карточке. Если авто нет в наличии, поможем найти такую же комплектацию под заказ.",
+  },
 ];
 
-/** Страница «Как купить»: пошаговый процесс покупки и частые вопросы. */
-const HowToBuy: FC = () => (
+/** Страница «Q&A»: как проходит покупка и ответы на частые вопросы. */
+const QA: FC = () => (
   <Container>
     <div css={styles.header}>
-      <h1 css={styles.title}>Как проходит покупка</h1>
+      <h1 css={styles.title}>Вопросы и ответы</h1>
       <p css={styles.subtitle}>
-        Пять простых шагов от выбора автомобиля до ключей в руках — с сопровождением на каждом этапе.
+        Как проходит покупка автомобиля в AutoHub и ответы на всё, что чаще всего спрашивают.
       </p>
     </div>
 
-    <div css={styles.steps}>
-      {STEPS.map((step) => (
-        <div key={step.n} css={styles.step}>
-          <span css={styles.stepNum}>{step.n}</span>
-          <div>
-            <h2 css={styles.stepTitle}>{step.title}</h2>
-            <p css={styles.stepText}>{step.text}</p>
+    <section>
+      <h2 css={styles.sectionTitle}>Как проходит покупка</h2>
+      <div css={styles.steps}>
+        {STEPS.map((step) => (
+          <div key={step.n} css={styles.step}>
+            <span css={styles.stepNum}>{step.n}</span>
+            <div>
+              <h3 css={styles.stepTitle}>{step.title}</h3>
+              <p css={styles.stepText}>{step.text}</p>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </section>
 
     <section css={styles.faq}>
-      <h2 css={styles.faqTitle}>Частые вопросы</h2>
+      <h2 css={styles.sectionTitle}>Частые вопросы</h2>
       <div css={styles.faqList}>
         {FAQ.map((item) => (
           <div key={item.q} css={styles.faqItem}>
@@ -104,6 +115,13 @@ const styles = {
     color: theme.colors.text,
   },
   subtitle: { margin: "12px 0 0", fontSize: "18px", lineHeight: 1.6, color: theme.colors.textMuted },
+  sectionTitle: {
+    margin: "0 0 28px",
+    fontSize: "clamp(24px, 3vw, 34px)",
+    fontWeight: 800,
+    letterSpacing: "-0.02em",
+    color: theme.colors.text,
+  },
   steps: {
     display: "flex",
     flexDirection: "column",
@@ -127,13 +145,6 @@ const styles = {
   stepTitle: { margin: "0 0 8px", fontSize: "20px", fontWeight: 700, color: theme.colors.text },
   stepText: { margin: 0, fontSize: "15px", lineHeight: 1.6, color: theme.colors.textMuted },
   faq: { padding: "72px 0 0" },
-  faqTitle: {
-    margin: "0 0 28px",
-    fontSize: "clamp(24px, 3vw, 34px)",
-    fontWeight: 800,
-    letterSpacing: "-0.02em",
-    color: theme.colors.text,
-  },
   faqList: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
@@ -163,4 +174,4 @@ const styles = {
   ctaText: { margin: 0, fontSize: "16px", color: "rgba(255,255,255,0.85)" },
 } as const;
 
-export default HowToBuy;
+export default QA;

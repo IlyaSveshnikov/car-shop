@@ -8,37 +8,52 @@ import Button from "../../components/ui/Button";
 import Rating from "../../components/ui/Rating";
 import CarList from "../../components/CarList/CarList";
 import { CarGridSkeleton } from "../../components/ui/Skeleton";
+import { ShieldIcon } from "../../components/icons/ShieldIcon";
+import { ChecklistIcon } from "../../components/icons/ChecklistIcon";
+import { ExchangeIcon } from "../../components/icons/ExchangeIcon";
+import { AwardIcon } from "../../components/icons/AwardIcon";
 import { theme } from "../../styles/theme";
 
 const TRUST = [
   {
-    icon: "🛡️",
+    icon: <ShieldIcon />,
     title: "Юридическая чистота",
     text: "Полный отчёт по VIN и проверка истории до подписания договора.",
   },
   {
-    icon: "🔧",
+    icon: <ChecklistIcon />,
     title: "Проверка 120+ пунктов",
     text: "Каждый автомобиль проходит диагностику перед выставлением в продажу.",
   },
   {
-    icon: "🔄",
+    icon: <ExchangeIcon />,
     title: "Trade-in за 30 минут",
     text: "Оценим вашу машину по рынку и зачтём в стоимость новой.",
   },
   {
-    icon: "🏆",
+    icon: <AwardIcon />,
     title: "Официальный дилер",
     text: "Гарантия производителя и сервисное обслуживание в одном месте.",
   },
 ];
 
-const STEPS = [
-  { n: "01", title: "Выбираете авто", text: "Каталог с фильтрами и честными характеристиками." },
-  { n: "02", title: "Оставляете заявку", text: "Бронируете автомобиль и записываетесь на тест-драйв." },
-  { n: "03", title: "Оформляем сделку", text: "Помогаем с кредитом, страховкой и документами." },
-  { n: "04", title: "Забираете ключи", text: "Выдаём подготовленный автомобиль или доставляем к вам." },
+const VALUES = [
+  {
+    title: "Прозрачность",
+    text: "Показываем реальную историю авто, отчёт по VIN и честную цену без скрытых доплат.",
+  },
+  {
+    title: "Качество",
+    text: "Каждый автомобиль проходит диагностику по 120+ пунктам перед продажей.",
+  },
+  {
+    title: "Забота",
+    text: "Сопровождаем сделку от первого звонка до выдачи ключей и после неё.",
+  },
 ];
+
+// Фото для hero-блока лежит в static на сервере (проксируется Vite в разработке).
+const HERO_IMAGE = "/static/images/hero_image.png";
 
 const Home: FC = () => {
   const featured = useAsync(
@@ -46,37 +61,41 @@ const Home: FC = () => {
     []
   );
   const reviews = useAsync(() => fetchReviews(), []);
-  const heroImage = featured.data?.items[0]?.img_src;
 
   return (
     <div>
-      {/* Hero */}
+      {/* Hero — editorial */}
       <section css={styles.hero}>
+        <div css={styles.heroImageWrap}>
+          <img css={styles.heroImage} src={HERO_IMAGE} alt="Автомобиль AutoHub" />
+          <span css={styles.heroImageFade} />
+        </div>
         <Container>
-          <div css={styles.heroGrid}>
-            <div css={styles.heroText}>
-              <span css={styles.eyebrow}>Автосалон премиум-класса</span>
-              <h1 css={styles.heroTitle}>
-                Автомобиль мечты — <span css={styles.accent}>без переплат и рисков</span>
-              </h1>
-              <p css={styles.heroSubtitle}>
-                Проверенные автомобили ведущих брендов, прозрачные цены и
-                сопровождение сделки от выбора до выдачи ключей.
-              </p>
-              <div css={styles.heroActions}>
-                <Button to="/catalog" size="lg">Смотреть каталог</Button>
-                <Button to="/how-to-buy" size="lg" variant="dark">Как проходит покупка</Button>
-              </div>
-              <div css={styles.stats}>
-                <Stat value="18+" label="авто в наличии" />
-                <Stat value="4" label="премиум-бренда" />
-                <Stat value="12 лет" label="на рынке" />
-              </div>
+          <div css={styles.heroContent}>
+            <h1 css={styles.heroTitle}>
+              Автомобиль
+              <br />
+              мечты. <span css={styles.accent}>Без&nbsp;рисков.</span>
+            </h1>
+            <p css={styles.heroSubtitle}>
+              Проверенные автомобили ведущих брендов, прозрачные цены и
+              сопровождение сделки от выбора до выдачи ключей.
+            </p>
+            <div css={styles.heroActions}>
+              <Button to="/catalog" size="lg">Смотреть каталог</Button>
+              <Button to="/qa" size="lg" variant="secondary">Как проходит покупка</Button>
             </div>
-            <div css={styles.heroImageBox}>
-              {heroImage && (
-                <img css={styles.heroImage} src={heroImage} alt="Автомобиль AutoHub" />
-              )}
+            <div css={styles.statCards}>
+              {[
+                { value: "18+", label: "авто в наличии" },
+                { value: "4", label: "премиум-бренда" },
+                { value: "12 лет", label: "на рынке" },
+              ].map((stat) => (
+                <div key={stat.label} css={styles.statCard}>
+                  <span css={styles.statValue}>{stat.value}</span>
+                  <span css={styles.statLabel}>{stat.label}</span>
+                </div>
+              ))}
             </div>
           </div>
         </Container>
@@ -115,23 +134,34 @@ const Home: FC = () => {
         </section>
       </Container>
 
-      {/* How it works */}
-      <section css={styles.howBand}>
+      {/* About */}
+      <section css={styles.aboutBand}>
         <Container>
-          <h2 css={[styles.sectionTitle, { color: theme.colors.surface, textAlign: "center" }]}>
-            Как проходит покупка
-          </h2>
-          <p css={[styles.sectionSubtitle, { color: "#B9B8CB", textAlign: "center", marginBottom: "40px" }]}>
-            Четыре простых шага — от выбора до ключей в руках
-          </p>
-          <div css={styles.stepsGrid}>
-            {STEPS.map((step) => (
-              <div key={step.n} css={styles.stepCard}>
-                <span css={styles.stepNumber}>{step.n}</span>
-                <h3 css={styles.stepTitle}>{step.title}</h3>
-                <p css={styles.stepText}>{step.text}</p>
-              </div>
-            ))}
+          <div css={styles.aboutGrid}>
+            <div>
+              <span css={styles.eyebrow}>О компании</span>
+              <h2 css={[styles.sectionTitle, { marginTop: "16px" }]}>
+                AutoHub — автомобили, которым доверяют
+              </h2>
+              <p css={styles.aboutText}>
+                Мы помогаем покупать автомобили спокойно и без рисков. С 2014 года
+                подбираем проверенные машины премиум-брендов, берём на себя проверку,
+                документы и подготовку — чтобы вам осталось только сесть за руль.
+              </p>
+              <p css={styles.aboutText}>
+                Сегодня это команда специалистов, собственный центр диагностики и
+                сервис полного цикла: подбор, trade-in, кредит, страхование и
+                постпродажная поддержка. Принцип неизменен — честность важнее сделки.
+              </p>
+            </div>
+            <div css={styles.valuesCol}>
+              {VALUES.map((value) => (
+                <div key={value.title} css={styles.valueCard}>
+                  <h3 css={styles.valueTitle}>{value.title}</h3>
+                  <p css={styles.valueText}>{value.text}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </Container>
       </section>
@@ -178,29 +208,45 @@ const Home: FC = () => {
   );
 };
 
-const Stat: FC<{ value: string; label: string }> = ({ value, label }) => (
-  <div>
-    <div css={styles.statValue}>{value}</div>
-    <div css={styles.statLabel}>{label}</div>
-  </div>
-);
-
 const styles = {
   hero: {
-    padding: "64px 0 72px",
-    background: `radial-gradient(1100px 500px at 15% 0%, ${theme.colors.primarySoft}, transparent 60%), ${theme.colors.background}`,
+    position: "relative",
+    overflow: "hidden",
+    background: `radial-gradient(760px 460px at 6% 8%, ${theme.colors.primarySoft}, transparent 55%), ${theme.colors.background}`,
   },
-  heroGrid: {
-    display: "grid",
-    gridTemplateColumns: "1.1fr 1fr",
-    gap: "48px",
-    alignItems: "center",
-    "@media (max-width: 900px)": { gridTemplateColumns: "1fr" },
+  heroImageWrap: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: "46%",
+    "@media (max-width: 900px)": {
+      position: "static",
+      width: "100%",
+    },
   },
-  heroText: { maxWidth: "560px" },
+  heroImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    "@media (max-width: 900px)": { height: "auto", aspectRatio: "16 / 10" },
+  },
+  heroImageFade: {
+    position: "absolute",
+    inset: 0,
+    background: `linear-gradient(90deg, ${theme.colors.background} 0%, rgba(246,246,250,0.55) 26%, transparent 62%)`,
+    "@media (max-width: 900px)": { display: "none" },
+  },
+  heroContent: {
+    position: "relative",
+    zIndex: 1,
+    maxWidth: "580px",
+    padding: "104px 0 108px",
+    "@media (max-width: 900px)": { maxWidth: "100%", padding: "44px 0 56px" },
+  },
   eyebrow: {
     display: "inline-block",
-    marginBottom: "18px",
+    marginBottom: "22px",
     padding: "6px 14px",
     fontSize: "13px",
     fontWeight: 600,
@@ -210,16 +256,17 @@ const styles = {
     boxShadow: theme.shadow.card,
   },
   heroTitle: {
-    margin: "0 0 20px",
-    fontSize: "clamp(34px, 5vw, 56px)",
-    lineHeight: 1.05,
+    margin: "0 0 24px",
+    fontSize: "clamp(46px, 7.5vw, 92px)",
+    lineHeight: 0.98,
     fontWeight: 800,
-    letterSpacing: "-0.02em",
+    letterSpacing: "-0.03em",
     color: theme.colors.text,
   },
   accent: { color: theme.colors.primary },
   heroSubtitle: {
     margin: "0 0 32px",
+    maxWidth: "440px",
     fontSize: "18px",
     lineHeight: 1.6,
     color: theme.colors.textMuted,
@@ -228,31 +275,30 @@ const styles = {
     display: "flex",
     flexWrap: "wrap",
     gap: "14px",
-    marginBottom: "40px",
   },
-  stats: {
+  statCards: {
     display: "flex",
-    gap: "40px",
+    flexWrap: "wrap",
+    gap: "16px",
+    marginTop: "48px",
   },
-  statValue: { fontSize: "30px", fontWeight: 800, color: theme.colors.text },
-  statLabel: { fontSize: "14px", color: theme.colors.textMuted },
-  heroImageBox: {
+  statCard: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    aspectRatio: "16 / 11",
-    padding: "24px",
-    background: `linear-gradient(135deg, ${theme.colors.surface}, ${theme.colors.surfaceMuted})`,
-    borderRadius: theme.radius.xl,
-    boxShadow: theme.shadow.lg,
-    "@media (max-width: 900px)": { order: -1 },
+    flexDirection: "column",
+    gap: "4px",
+    padding: "16px 22px",
+    backgroundColor: theme.colors.surface,
+    border: `1px solid ${theme.colors.border}`,
+    borderRadius: theme.radius.lg,
+    boxShadow: theme.shadow.card,
   },
-  heroImage: { width: "100%", height: "100%", objectFit: "contain" },
+  statValue: { fontSize: "26px", fontWeight: 800, lineHeight: 1, color: theme.colors.text },
+  statLabel: { fontSize: "13px", color: theme.colors.textMuted },
   trustGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(4, 1fr)",
     gap: "24px",
-    marginTop: "-40px",
+    marginTop: "56px",
     "@media (max-width: 900px)": { gridTemplateColumns: "1fr 1fr" },
     "@media (max-width: 520px)": { gridTemplateColumns: "1fr" },
   },
@@ -263,7 +309,16 @@ const styles = {
     borderRadius: theme.radius.lg,
     boxShadow: theme.shadow.card,
   },
-  trustIcon: { fontSize: "28px" },
+  trustIcon: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "48px",
+    height: "48px",
+    color: theme.colors.primary,
+    backgroundColor: theme.colors.primarySoft,
+    borderRadius: theme.radius.md,
+  },
   trustTitle: { margin: "14px 0 8px", fontSize: "17px", fontWeight: 700, color: theme.colors.text },
   trustText: { margin: 0, fontSize: "14px", lineHeight: 1.55, color: theme.colors.textMuted },
   section: { padding: "72px 0 0" },
@@ -290,27 +345,39 @@ const styles = {
     whiteSpace: "nowrap",
     "&:hover": { textDecoration: "underline" },
   },
-  howBand: {
+  aboutBand: {
     margin: "72px 0 0",
     padding: "72px 0",
-    backgroundColor: theme.colors.dark,
+    backgroundColor: theme.colors.surface,
+    borderTop: `1px solid ${theme.colors.border}`,
+    borderBottom: `1px solid ${theme.colors.border}`,
   },
-  stepsGrid: {
+  aboutGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "24px",
-    "@media (max-width: 900px)": { gridTemplateColumns: "1fr 1fr" },
-    "@media (max-width: 520px)": { gridTemplateColumns: "1fr" },
+    gridTemplateColumns: "1.2fr 1fr",
+    gap: "48px",
+    alignItems: "center",
+    "@media (max-width: 860px)": { gridTemplateColumns: "1fr" },
   },
-  stepCard: {
-    padding: "28px",
-    backgroundColor: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.08)",
+  aboutText: {
+    margin: "16px 0 0",
+    fontSize: "16px",
+    lineHeight: 1.7,
+    color: theme.colors.textMuted,
+  },
+  valuesCol: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+  },
+  valueCard: {
+    padding: "22px",
+    backgroundColor: theme.colors.surfaceMuted,
+    border: `1px solid ${theme.colors.border}`,
     borderRadius: theme.radius.lg,
   },
-  stepNumber: { fontSize: "28px", fontWeight: 800, color: theme.colors.primaryLight },
-  stepTitle: { margin: "14px 0 8px", fontSize: "18px", fontWeight: 700, color: theme.colors.surface },
-  stepText: { margin: 0, fontSize: "14px", lineHeight: 1.55, color: "#B9B8CB" },
+  valueTitle: { margin: "0 0 8px", fontSize: "18px", fontWeight: 700, color: theme.colors.text },
+  valueText: { margin: 0, fontSize: "14px", lineHeight: 1.55, color: theme.colors.textMuted },
   reviewsGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",

@@ -95,7 +95,7 @@ const styles = {
     aspectRatio: "16 / 11",
     marginBottom: "16px",
     padding: "14px",
-    backgroundColor: theme.colors.surfaceMuted,
+    backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.md,
     overflow: "hidden",
   },

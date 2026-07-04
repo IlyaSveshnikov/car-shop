@@ -22,6 +22,18 @@ export interface Car {
   features: string[];
 }
 
+/** Проверяет, что значение похоже на полноценный объект автомобиля. */
+export function isCar(value: unknown): value is Car {
+  const car = value as Car;
+  return (
+    typeof car === "object" &&
+    car !== null &&
+    typeof car.id === "number" &&
+    typeof car.priceValue === "number" &&
+    typeof car.brand === "string"
+  );
+}
+
 /** Отзыв клиента (для главной страницы). */
 export interface Review {
   id: number;

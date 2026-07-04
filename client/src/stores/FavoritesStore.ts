@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction, toJS } from "mobx";
-import { Car } from "../types/car";
+import { Car, isCar } from "../types/car";
 import { loadFromStorage, saveToStorage } from "../utils/storage";
 
 const STORAGE_KEY = "favorites";
@@ -15,9 +15,11 @@ export class FavoritesStore {
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
 
-    loadFromStorage<Car[]>(STORAGE_KEY, []).forEach((car) =>
-      this.items.set(car.id, car)
-    );
+    // Валидируем данные: старые версии могли хранить массив id — их игнорируем,
+    // иначе битые записи ломают рендер (обращение к отсутствующим полям).
+    loadFromStorage<unknown[]>(STORAGE_KEY, [])
+      .filter(isCar)
+      .forEach((car) => this.items.set(car.id, car));
 
     reaction(
       () => this.list.map((car) => toJS(car)),

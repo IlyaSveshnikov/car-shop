@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { theme } from "../../styles/theme";
+import Logo from "../ui/Logo";
 
 const COLUMNS = [
   {
@@ -14,8 +15,8 @@ const COLUMNS = [
   {
     title: "Компания",
     links: [
-      { to: "/about", label: "О нас" },
-      { to: "/how-to-buy", label: "Как купить" },
+      { to: "/", label: "О нас" },
+      { to: "/qa", label: "Q&A" },
       { to: "/cart", label: "Корзина" },
     ],
   },
@@ -27,8 +28,7 @@ const Footer: FC = () => (
     <div css={styles.inner}>
       <div css={styles.brandCol}>
         <Link to="/" css={styles.logo}>
-          <span css={styles.logoMark}>◈</span>Auto
-          <span css={styles.logoAccent}>Hub</span>
+          <Logo size={32} textColor={theme.colors.surface} />
         </Link>
         <p css={styles.tagline}>
           Автосалон премиум-класса. Проверенные автомобили, честные цены и
@@ -89,15 +89,9 @@ const styles = {
   logo: {
     display: "inline-flex",
     alignItems: "center",
-    gap: "6px",
-    fontSize: "22px",
-    fontWeight: 800,
-    color: theme.colors.surface,
     textDecoration: "none",
     marginBottom: "16px",
   },
-  logoMark: { color: theme.colors.primaryLight, marginRight: "2px" },
-  logoAccent: { color: theme.colors.primaryLight },
   tagline: {
     margin: 0,
     fontSize: "14px",

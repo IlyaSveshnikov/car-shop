@@ -1,0 +1,12 @@
+# Render Blueprint — деплой одним сервисом (NestJS отдаёт API и собранный клиент).
+# Как использовать: Render Dashboard → New → Blueprint → выбрать этот репозиторий.
+services:
+  - type: web
+    name: autohub
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "18"

@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction, toJS } from "mobx";
-import { Car } from "../types/car";
+import { Car, isCar } from "../types/car";
 import { loadFromStorage, saveToStorage } from "../utils/storage";
 
 const STORAGE_KEY = "cart";
@@ -20,9 +20,16 @@ export class CartStore {
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
 
-    loadFromStorage<CartItem[]>(STORAGE_KEY, []).forEach((item) =>
-      this.items.set(item.car.id, item)
-    );
+    // Пропускаем битые/устаревшие записи, чтобы они не ломали рендер корзины.
+    loadFromStorage<unknown[]>(STORAGE_KEY, [])
+      .filter(
+        (item): item is CartItem =>
+          typeof item === "object" &&
+          item !== null &&
+          isCar((item as CartItem).car) &&
+          typeof (item as CartItem).qty === "number"
+      )
+      .forEach((item) => this.items.set(item.car.id, item));
 
     reaction(
       () => this.list.map((item) => toJS(item)),
