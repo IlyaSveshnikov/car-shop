@@ -1,6 +1,6 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useCartStore, useFavoritesStore } from "../../stores/context";
 import { theme } from "../../styles/theme";
 import Logo from "../ui/Logo";
@@ -17,10 +17,28 @@ const NAV_LINKS = [
 const Navbar: FC = observer(() => {
   const favoritesStore = useFavoritesStore();
   const cartStore = useCartStore();
+  const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  // Закрываем мобильное меню при переходе на другую страницу.
+  useEffect(() => setOpen(false), [pathname]);
+
+  const activeStyle = ({ isActive }: { isActive: boolean }) =>
+    isActive ? { color: theme.colors.primary } : undefined;
 
   return (
     <header css={styles.header}>
       <div css={styles.inner}>
+        <button
+          type="button"
+          css={styles.burger}
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Закрыть меню" : "Открыть меню"}
+          aria-expanded={open}
+        >
+          <BurgerIcon open={open} />
+        </button>
+
         <span css={styles.logo}>
           <Logo size={34} />
         </span>
@@ -32,9 +50,7 @@ const Navbar: FC = observer(() => {
               to={link.to}
               end={link.end}
               css={styles.navLink}
-              style={({ isActive }) =>
-                isActive ? { color: theme.colors.primary } : undefined
-              }
+              style={activeStyle}
             >
               {link.label}
             </NavLink>
@@ -56,9 +72,51 @@ const Navbar: FC = observer(() => {
           />
         </div>
       </div>
+
+      {open && (
+        <nav css={styles.mobilePanel}>
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              css={styles.mobileLink}
+              style={activeStyle}
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+      )}
     </header>
   );
 });
+
+const BurgerIcon: FC<{ open: boolean }> = ({ open }) => (
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    {open ? (
+      <>
+        <line x1="5" y1="5" x2="19" y2="19" />
+        <line x1="19" y1="5" x2="5" y2="19" />
+      </>
+    ) : (
+      <>
+        <line x1="4" y1="7" x2="20" y2="7" />
+        <line x1="4" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="17" x2="20" y2="17" />
+      </>
+    )}
+  </svg>
+);
 
 const IconLink: FC<{
   to: string;
@@ -97,6 +155,22 @@ const styles = {
     maxWidth: theme.layout.maxWidth,
     margin: "0 auto",
     padding: "16px 24px",
+    "@media (max-width: 720px)": { gap: "16px" },
+  },
+  burger: {
+    display: "none",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "40px",
+    height: "40px",
+    padding: 0,
+    color: theme.colors.text,
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: theme.radius.md,
+    cursor: "pointer",
+    "&:hover": { backgroundColor: theme.colors.primarySoft, color: theme.colors.primary },
+    "@media (max-width: 720px)": { display: "inline-flex" },
   },
   logo: {
     display: "inline-flex",
@@ -106,8 +180,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "28px",
-    "@media (max-width: 560px)": { gap: "16px" },
-    "@media (max-width: 380px)": { display: "none" },
+    "@media (max-width: 720px)": { display: "none" },
   },
   navLink: {
     fontSize: "15px",
@@ -161,6 +234,27 @@ const styles = {
     fontSize: "15px",
     fontWeight: 500,
     "@media (max-width: 520px)": { display: "none" },
+  },
+  mobilePanel: {
+    position: "absolute",
+    top: "100%",
+    left: 0,
+    right: 0,
+    display: "none",
+    flexDirection: "column",
+    padding: "8px 0",
+    backgroundColor: theme.colors.surface,
+    borderBottom: `1px solid ${theme.colors.border}`,
+    boxShadow: theme.shadow.card,
+    "@media (max-width: 720px)": { display: "flex" },
+  },
+  mobileLink: {
+    padding: "14px 24px",
+    fontSize: "16px",
+    fontWeight: 500,
+    color: theme.colors.text,
+    textDecoration: "none",
+    "&:hover": { backgroundColor: theme.colors.primarySoft, color: theme.colors.primary },
   },
 } as const;
 
