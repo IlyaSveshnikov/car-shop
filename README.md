@@ -11,6 +11,7 @@
 > «магазин»: маршрутизация, серверная фильтрация и пагинация, воронка покупки от
 > карточки до подтверждённого заказа.
 
+[![CI](https://github.com/IlyaSveshnikov/car-shop/actions/workflows/ci.yml/badge.svg)](https://github.com/IlyaSveshnikov/car-shop/actions/workflows/ci.yml)
 ![Tech](https://img.shields.io/badge/React-18-149ECA?logo=react&logoColor=white)
 ![Tech](https://img.shields.io/badge/TypeScript-4.8-3178C6?logo=typescript&logoColor=white)
 ![Tech](https://img.shields.io/badge/NestJS-9-E0234E?logo=nestjs&logoColor=white)
